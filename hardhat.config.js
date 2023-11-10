@@ -1,6 +1,19 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
 
-/** @type import('hardhat/config').HardhatUserConfig */
+
 module.exports = {
   solidity: "0.8.19",
+  networks: {
+    sepolia: {
+      url: process.env.SEPOLIA_PROVIDER,
+      accounts: [process.env.DEPLOYER_TEST]
+    }
+  },
+  etherscan: {
+    // Your API key for Etherscan
+    apiKey: {
+      sepolia: process.env.SEPOLIA_KEY,
+    }
+  },
 };

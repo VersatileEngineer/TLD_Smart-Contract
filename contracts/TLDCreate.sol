@@ -79,10 +79,10 @@ contract Ownable {
 contract TLDCreate is Ownable {
     /** STRUCTS */
     struct DomainDetails {
-        bytes name;
+        string name;
         bytes12 topLevel;
         address owner;
-        bytes15 ip;
+        string ip;
     }
 
     /** STATE VARIABLES */
@@ -93,7 +93,7 @@ contract TLDCreate is Ownable {
      * MODIFIERS
      */
 
-    modifier isDomainOwner(bytes memory domain, bytes12 topLevel) {
+    modifier isDomainOwner(string memory domain, bytes12 topLevel) {
         bytes32 domainHash = getDomainHash(domain, topLevel);
         require(
             domainNames[domainHash].owner == msg.sender,
@@ -107,20 +107,20 @@ contract TLDCreate is Ownable {
      */
     event LogDomainNameRegistered(
         uint indexed timestamp,
-        bytes domainName,
+        string domainName,
         bytes12 topLevel
     );
 
     event LogDomainNameEdited(
         uint indexed timestamp,
-        bytes domainName,
+        string domainName,
         bytes12 topLevel,
-        bytes15 newIp
+        string newIp
     );
 
     event LogDomainNameTransferred(
         uint indexed timestamp,
-        bytes domainName,
+        string domainName,
         bytes12 topLevel,
         address indexed owner,
         address newOwner
@@ -138,9 +138,9 @@ contract TLDCreate is Ownable {
      * @param ip - the ip of the host
      */
     function register(
-        bytes memory domain,
+        string memory domain,
         bytes12 topLevel,
-        bytes15 ip
+        string memory ip
     ) public onlyOwner {
         // calculate the domain hash
         bytes32 domainHash = getDomainHash(domain, topLevel);
@@ -174,9 +174,9 @@ contract TLDCreate is Ownable {
      * @param newIp - the new ip for the domain
      */
     function edit(
-        bytes memory domain,
+        string memory domain,
         bytes12 topLevel,
-        bytes15 newIp
+        string memory newIp
     ) public isDomainOwner(domain, topLevel) {
         // calculate the domain hash - unique id
         bytes32 domainHash = getDomainHash(domain, topLevel);
@@ -195,7 +195,7 @@ contract TLDCreate is Ownable {
      * @param newOwner - address of the new owner
      */
     function transferDomain(
-        bytes memory domain,
+        string memory domain,
         bytes12 topLevel,
         address newOwner
     ) public isDomainOwner(domain, topLevel) {
@@ -224,9 +224,9 @@ contract TLDCreate is Ownable {
      * @param topLevel
      */
     function getIP(
-        bytes memory domain,
+        string memory domain,
         bytes12 topLevel
-    ) public view returns (bytes15) {
+    ) public view returns (string memory) {
         // calculate the hash of the domain
         bytes32 domainHash = getDomainHash(domain, topLevel);
 
@@ -241,7 +241,7 @@ contract TLDCreate is Ownable {
      * @return domainHash
      */
     function getDomainHash(
-        bytes memory domain,
+        string memory domain,
         bytes12 topLevel
     ) public pure returns (bytes32) {
         // @dev - tightly pack parameters in struct for keccak256
